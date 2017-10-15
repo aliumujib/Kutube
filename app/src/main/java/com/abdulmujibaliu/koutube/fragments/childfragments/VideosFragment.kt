@@ -2,17 +2,24 @@ package com.abdulmujibaliu.koutube.fragments.childfragments
 
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.view.LayoutInflater
+import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
-import android.view.ViewGroup
+import com.abdulmujibaliu.koutube.data.PlaylistGetterInterface
+import com.abdulmujibaliu.koutube.data.RetrofitFactory
+import com.abdulmujibaliu.koutube.fragments.rvadapter.VideoRVAdapter
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Consumer
+import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_base.*
 
-import com.abdulmujibaliu.koutube.R
+
+class VideosFragment : BaseFragment() {
+
+    var videosRVAdapter : VideoRVAdapter? = null
 
 
-class VideosFragment : Fragment() {
-
-
+    val TAG: String = javaClass.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,11 +28,32 @@ class VideosFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.fragment_videos, container, false)
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+        videosRVAdapter = VideoRVAdapter(context)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = videosRVAdapter
+        videosRVAdapter?.notifyDataSetChanged()
+
+
+      var serviceInstance =  RetrofitFactory.getInstance().create(PlaylistGetterInterface::class.java)
+
+        serviceInstance.getPlaylists("PLP2VuCguZpsnJadOEvHTONtjpSdKMykRp")
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    data->
+
+                    Log.d(TAG, data)
+                }, {
+                    error->
+
+                    error.printStackTrace()
+                })
     }
+
 
     companion object {
 
@@ -37,4 +65,4 @@ class VideosFragment : Fragment() {
         }
     }
 
-}// Required empty public constructor
+}

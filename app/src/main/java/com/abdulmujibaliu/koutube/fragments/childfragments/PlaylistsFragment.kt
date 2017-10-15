@@ -10,7 +10,7 @@ import android.view.ViewGroup
 
 import com.abdulmujibaliu.koutube.R
 
-class PlaylistsFragment : Fragment() {
+class PlaylistsFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,13 +19,6 @@ class PlaylistsFragment : Fragment() {
 
         }
     }
-
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.fragment_playlists, container, false)
-    }
-
 
 
     override fun onAttach(context: Context?) {

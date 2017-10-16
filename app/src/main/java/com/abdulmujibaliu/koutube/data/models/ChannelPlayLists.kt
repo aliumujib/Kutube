@@ -8,5 +8,11 @@ class ChannelPlayLists(list: MutableList<String>?) {
 
     val ids: MutableList<String> = list!!
 
+}
+
+
+class ChannelPlayListItems(videoIds: MutableList<String>?) {
+
+    val videoIds: MutableList<String> = videoIds!!
 
 }

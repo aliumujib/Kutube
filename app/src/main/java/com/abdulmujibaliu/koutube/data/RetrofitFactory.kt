@@ -1,8 +1,10 @@
 package com.abdulmujibaliu.koutube.data
 
 import com.abdulmujibaliu.koutube.BuildConfig
+import com.abdulmujibaliu.koutube.data.models.ChannelPlayListItems
 import com.abdulmujibaliu.koutube.data.models.ChannelPlayLists
 import com.abdulmujibaliu.koutube.data.models.deserializers.ChannelPlaylistsDeserializer
+import com.abdulmujibaliu.koutube.data.models.deserializers.PlaylistsItemsDeserializer
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -41,7 +43,7 @@ class RetrofitFactory {
 
                 val gson = GsonBuilder()
                         .registerTypeAdapter(ChannelPlayLists::class.java, ChannelPlaylistsDeserializer())
-                        //.registerTypeAdapter(Playlist::class.java, PlaylistDeserializer())
+                        .registerTypeAdapter(ChannelPlayListItems::class.java, PlaylistsItemsDeserializer())
                         .create()
 
                 retrofit = retrofit2.Retrofit.Builder()
@@ -79,7 +81,7 @@ class RetrofitFactory {
         private fun createLoggingInterceptor(): HttpLoggingInterceptor {
             val interceptor = HttpLoggingInterceptor()
             if (BuildConfig.DEBUG) {
-                interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+                interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC)
             } else {
                 interceptor.setLevel(HttpLoggingInterceptor.Level.NONE)
             }
@@ -95,5 +97,10 @@ class KutConstants {
         val API_KEY_VAL = "AIzaSyCzTQAdni52z7AR6vLPBVoM75FES9BIUTw"
         val KEY_ITEMS = "items"
         val KEY_PLAYLIST_ID: String = "id"
+        val KEY_CONTENT_DETAILS: String = "contentDetails"
+        val KEY_VIDEO_ID: String = "videoId"
+        val SNIPPET: String = "snippet"
+        val RECOURCE_ID: String = "resourceId"
+
     }
 }

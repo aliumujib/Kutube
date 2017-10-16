@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.View
 import com.abdulmujibaliu.koutube.data.PlaylistGetterInterface
 import com.abdulmujibaliu.koutube.data.RetrofitFactory
+import com.abdulmujibaliu.koutube.data.repositories.PlayListRepository
+import com.abdulmujibaliu.koutube.data.repositories.contracts.RepositoryContracts
 import com.abdulmujibaliu.koutube.fragments.rvadapter.VideoRVAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
@@ -16,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_base.*
 
 class VideosFragment : BaseFragment() {
 
-    var videosRVAdapter : VideoRVAdapter? = null
+    var videosRVAdapter: VideoRVAdapter? = null
 
 
     val TAG: String = javaClass.simpleName
@@ -38,34 +40,43 @@ class VideosFragment : BaseFragment() {
         videosRVAdapter?.notifyDataSetChanged()
 
 
-      var serviceInstance =  RetrofitFactory.getInstance().create(PlaylistGetterInterface::class.java)
+//      var serviceInstance =  RetrofitFactory.getInstance().create(PlaylistGetterInterface::class.java)
+//
+//        serviceInstance.getPlaylistItems("PLP2VuCguZpsnJadOEvHTONtjpSdKMykRp")
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe({
+//                    data->
+//
+//                    Log.d(TAG, data)
+//                }, {
+//                    error->
+//
+//                    error.printStackTrace()
+//                })
+//
+//
+//        serviceInstance.getPlaylistsForChannel("UC_x5XG1OV2P6uZZ5FSM9Ttw")
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe({
+//                    data ->
+//                    run {
+//                        Log.d(TAG, data.ids.size.toString())
+//                    }
+//                }, {
+//                    t: Throwable? ->
+//                    t.printStackTrace()
+//                })
 
-        serviceInstance.getPlaylistItems("PLP2VuCguZpsnJadOEvHTONtjpSdKMykRp")
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({
-                    data->
+        val playListRepo: RepositoryContracts.IPlaylistRepository = PlayListRepository.getInstance()!!
 
+        playListRepo.getPlayVideosForChannels(listOf("UCpEHs4jtfj1sTo1g-ubDyMg")).subscribe(
+                { data ->
                     Log.d(TAG, data)
-                }, {
-                    error->
-
-                    error.printStackTrace()
-                })
-
-
-        serviceInstance.getPlaylistsForChannel("UC_x5XG1OV2P6uZZ5FSM9Ttw")
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({
-                    data ->
-                    run {
-                        Log.d(TAG, data.ids.size.toString())
-                    }
-                }, {
-                    t: Throwable? ->
-                    t?.printStackTrace()
-                })
+                }, { error ->
+            error.printStackTrace()
+        })
     }
 
 

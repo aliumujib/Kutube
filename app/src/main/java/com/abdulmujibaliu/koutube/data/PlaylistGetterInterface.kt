@@ -1,9 +1,9 @@
 package com.abdulmujibaliu.koutube.data
 
+import com.abdulmujibaliu.koutube.data.models.ChannelPlayListItems
 import com.abdulmujibaliu.koutube.data.models.ChannelPlayLists
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
@@ -12,10 +12,10 @@ import retrofit2.http.Query
 interface PlaylistGetterInterface {
 
     @GET("playlistItems")
-    fun getPlaylistItems(@Query("playlistId") playlistID :String) : Flowable<String>
+    fun getPlaylistItems(@Query("playlistId") playlistID :String) : Observable<ChannelPlayListItems>
 
 
     @GET("playlists")
-    fun getPlaylistsForChannel(@Query("channelId") channelID :String) : Flowable<ChannelPlayLists>
+    fun getPlaylistsForChannel(@Query("channelId") channelID :String) : Observable<ChannelPlayLists>
 
 }

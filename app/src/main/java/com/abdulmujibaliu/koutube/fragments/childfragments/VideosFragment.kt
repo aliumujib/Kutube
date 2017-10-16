@@ -40,7 +40,7 @@ class VideosFragment : BaseFragment() {
 
       var serviceInstance =  RetrofitFactory.getInstance().create(PlaylistGetterInterface::class.java)
 
-        serviceInstance.getPlaylists("PLP2VuCguZpsnJadOEvHTONtjpSdKMykRp")
+        serviceInstance.getPlaylistItems("PLP2VuCguZpsnJadOEvHTONtjpSdKMykRp")
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({
@@ -51,6 +51,20 @@ class VideosFragment : BaseFragment() {
                     error->
 
                     error.printStackTrace()
+                })
+
+
+        serviceInstance.getPlaylistsForChannel("UC_x5XG1OV2P6uZZ5FSM9Ttw")
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    data ->
+                    run {
+                        Log.d(TAG, data.ids.size.toString())
+                    }
+                }, {
+                    t: Throwable? ->
+                    t?.printStackTrace()
                 })
     }
 

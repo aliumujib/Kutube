@@ -1,6 +1,9 @@
 package com.abdulmujibaliu.koutube.data
 
 import com.abdulmujibaliu.koutube.BuildConfig
+import com.abdulmujibaliu.koutube.data.models.ChannelPlayLists
+import com.abdulmujibaliu.koutube.data.models.deserializers.ChannelPlaylistsDeserializer
+import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -36,9 +39,14 @@ class RetrofitFactory {
                         .connectTimeout(1, TimeUnit.MINUTES)
                         .build()
 
+                val gson = GsonBuilder()
+                        .registerTypeAdapter(ChannelPlayLists::class.java, ChannelPlaylistsDeserializer())
+                        //.registerTypeAdapter(Playlist::class.java, PlaylistDeserializer())
+                        .create()
+
                 retrofit = retrofit2.Retrofit.Builder()
                         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create(gson))
                         .client(client)
                         .baseUrl("https://www.googleapis.com/youtube/v3/")
                         .build()
@@ -85,5 +93,7 @@ class KutConstants {
     companion object {
         val API_KEY = "key"
         val API_KEY_VAL = "AIzaSyCzTQAdni52z7AR6vLPBVoM75FES9BIUTw"
+        val KEY_ITEMS = "items"
+        val KEY_PLAYLIST_ID: String = "id"
     }
 }

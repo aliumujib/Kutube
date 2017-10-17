@@ -39,7 +39,7 @@ class LibraryTabsActivityFragment : Fragment(), MainContract.View, YoutubeLikeBe
     val TAG = javaClass.simpleName
     var rootCordinator: CoordinatorLayout? = null
     private var player: YouTubePlayer? = null
-
+    private var behavior: YoutubeLikeBehavior<YouTubePlayerView>? = null
 
     override fun getPresenter(): MainContract.Presenter {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -62,22 +62,24 @@ class LibraryTabsActivityFragment : Fragment(), MainContract.View, YoutubeLikeBe
 
         tabs.setupWithViewPager(container)
 
+        media = layoutInflater.inflate(R.layout.youtubevideo_player, rootCordinator, false) as YouTubePlayerView
+        description = layoutInflater.inflate(R.layout.video_description, rootCordinator, false)
+
+
+
+        rootCordinator!!.addView(media)
+        rootCordinator!!.addView(description)
+
+        behavior = YoutubeLikeBehavior.from(media)
+        behavior?.listener = this
+
+        behavior?.state = YoutubeLikeBehavior.STATE_HIDDEN
     }
 
 
 
     override fun showVideoView(video: YoutubeVideo) {
-        media = layoutInflater.inflate(R.layout.youtubevideo_player, rootCordinator, false) as YouTubePlayerView
-        description = layoutInflater.inflate(R.layout.video_description, rootCordinator, false)
-
-        val fullScreenManager = FullScreenManager(activity)
-
-        rootCordinator!!.addView(media)
-        rootCordinator!!.addView(description)
-
-        val behavior = YoutubeLikeBehavior.from(media)
-        behavior?.listener = this
-
+        
         media!!.initialize({ initializedYouTubePlayer ->
             player = initializedYouTubePlayer
 
@@ -90,24 +92,7 @@ class LibraryTabsActivityFragment : Fragment(), MainContract.View, YoutubeLikeBe
             })
         }, true)
 
-
-        media!!.addFullScreenListener(object : YouTubePlayerFullScreenListener {
-            override fun onYouTubePlayerEnterFullScreen() {
-                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
-                fullScreenManager.enterFullScreen()
-
-                media!!.getPlayerUIController().setCustomAction1(ContextCompat.getDrawable(activity, R.drawable.ic_pause_36dp),
-                        { if (player != null) player?.pause() })
-            }
-
-            override fun onYouTubePlayerExitFullScreen() {
-                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
-                fullScreenManager.exitFullScreen()
-
-                media!!.getPlayerUIController().showCustomAction1(false)
-            }
-        })
-
+        behavior?.state = YoutubeLikeBehavior.STATE_EXPANDED
     }
 
 

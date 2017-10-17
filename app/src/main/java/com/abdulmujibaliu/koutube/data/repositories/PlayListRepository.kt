@@ -3,11 +3,14 @@ package com.abdulmujibaliu.koutube.data.repositories
 import android.util.Log
 import com.abdulmujibaliu.koutube.data.PlaylistGetterInterface
 import com.abdulmujibaliu.koutube.data.RetrofitFactory
+import com.abdulmujibaliu.koutube.data.VideoGetterInterface
 import com.abdulmujibaliu.koutube.data.models.ChannelPlayListItems
 import com.abdulmujibaliu.koutube.data.models.ChannelPlayLists
+import com.abdulmujibaliu.koutube.data.models.VideoResult
 import com.abdulmujibaliu.koutube.data.repositories.contracts.RepositoryContracts
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.ReplaySubject
 
@@ -17,10 +20,13 @@ import io.reactivex.subjects.ReplaySubject
 class PlayListRepository : RepositoryContracts.IPlaylistRepository {
     val TAG = javaClass.simpleName
 
-    var serviceInstance = RetrofitFactory.getInstance().create(PlaylistGetterInterface::class.java)
-    var playListSubject = ReplaySubject.create<String>()
+    var playListserviceInstance = RetrofitFactory.getInstance().create(PlaylistGetterInterface::class.java)
+    var videosServiceInstance = RetrofitFactory.getInstance().create(VideoGetterInterface::class.java)
 
-    override fun getPlayVideosForChannels(channelIDs: List<String>): Observable<String> {
+
+    var playListSubject = ReplaySubject.create<VideoResult>()
+
+    override fun getPlayVideosForChannels(channelIDs: List<String>): ReplaySubject<VideoResult>? {
         getChannelsPlayList(channelIDs)
         return playListSubject
     }
@@ -30,7 +36,7 @@ class PlayListRepository : RepositoryContracts.IPlaylistRepository {
 
         for (channelID in channelIDs) {
             Log.d(TAG, "Getting for channelID" + channelID)
-            observablesList.add(serviceInstance.getPlaylistsForChannel(channelID).observeOn(AndroidSchedulers.mainThread())
+            observablesList.add(playListserviceInstance.getPlaylistsForChannel(channelID).observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io()))
         }
 
@@ -47,6 +53,7 @@ class PlayListRepository : RepositoryContracts.IPlaylistRepository {
                 .subscribe({ data ->
 
                     getPlayListsItems(data)
+
                 }, { throwable ->
 
                     throwable.printStackTrace()
@@ -58,25 +65,52 @@ class PlayListRepository : RepositoryContracts.IPlaylistRepository {
         val observablesList: MutableList<Observable<ChannelPlayListItems>> = mutableListOf()
 
         for (playListID in playListIDs) {
-            observablesList.add(serviceInstance.getPlaylistItems(playListID).observeOn(AndroidSchedulers.mainThread())
+            observablesList.add(playListserviceInstance.getPlaylistItems(playListID).observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io()))
         }
 
         Observable.zip(observablesList) { dataArray ->
-            {
-                var videoIDs = mutableListOf<String>()
+            var videoIDList = mutableListOf<String>()
 
-                for (any in dataArray) {
-                    videoIDs.addAll((any as ChannelPlayListItems).videoIds)
+            for (any in dataArray) {
+                //Log.d(TAG, (any as ChannelPlayListItems).videoIds.toString())
+                videoIDList.addAll((any as ChannelPlayListItems).videoIds)
+            }
+
+            videoIDList
+
+        }.subscribe({ data ->
+            var videoIDs: String? = null
+
+            for ((index, string) in (data.withIndex())) {
+                if (index < 50) {
+                    when (index) {
+                        0 -> videoIDs = string
+                        data.size - 1 -> videoIDs += string
+                        49 -> videoIDs += string
+                        else -> videoIDs = videoIDs + string + ","
+                    }
                 }
             }
-        }.subscribe({ data ->
 
+            //Log.d(TAG, videoIDs)
+            getVideoItems(videoIDs!!)
         }, { throwable ->
 
             throwable.printStackTrace()
         })
 
+    }
+
+    fun getVideoItems(idStrings: String) {
+        videosServiceInstance.getVideoItems(idStrings)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ data ->
+                    playListSubject.onNext(data)
+                }, { throwable ->
+                    throwable.printStackTrace()
+                })
     }
 
 

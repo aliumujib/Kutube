@@ -5,14 +5,9 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
-import com.abdulmujibaliu.koutube.data.PlaylistGetterInterface
-import com.abdulmujibaliu.koutube.data.RetrofitFactory
 import com.abdulmujibaliu.koutube.data.repositories.PlayListRepository
 import com.abdulmujibaliu.koutube.data.repositories.contracts.RepositoryContracts
 import com.abdulmujibaliu.koutube.fragments.rvadapter.VideoRVAdapter
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Consumer
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_base.*
 
 
@@ -40,9 +35,9 @@ class VideosFragment : BaseFragment() {
         videosRVAdapter?.notifyDataSetChanged()
 
 
-//      var serviceInstance =  RetrofitFactory.getInstance().create(PlaylistGetterInterface::class.java)
+//      var playListserviceInstance =  RetrofitFactory.getInstance().create(PlaylistGetterInterface::class.java)
 //
-//        serviceInstance.getPlaylistItems("PLP2VuCguZpsnJadOEvHTONtjpSdKMykRp")
+//        playListserviceInstance.getPlaylistItems("PLP2VuCguZpsnJadOEvHTONtjpSdKMykRp")
 //                .observeOn(AndroidSchedulers.mainThread())
 //                .subscribeOn(Schedulers.io())
 //                .subscribe({
@@ -56,7 +51,7 @@ class VideosFragment : BaseFragment() {
 //                })
 //
 //
-//        serviceInstance.getPlaylistsForChannel("UC_x5XG1OV2P6uZZ5FSM9Ttw")
+//        playListserviceInstance.getPlaylistsForChannel("UC_x5XG1OV2P6uZZ5FSM9Ttw")
 //                .observeOn(AndroidSchedulers.mainThread())
 //                .subscribeOn(Schedulers.io())
 //                .subscribe({
@@ -71,9 +66,10 @@ class VideosFragment : BaseFragment() {
 
         val playListRepo: RepositoryContracts.IPlaylistRepository = PlayListRepository.getInstance()!!
 
-        playListRepo.getPlayVideosForChannels(listOf("UCpEHs4jtfj1sTo1g-ubDyMg")).subscribe(
+        playListRepo.getPlayVideosForChannels(listOf("UCpEHs4jtfj1sTo1g-ubDyMg"))?.subscribe(
                 { data ->
-                    Log.d(TAG, data)
+                    Log.d(TAG, data.toString())
+                    videosRVAdapter!!.addAll(data.videos)
                 }, { error ->
             error.printStackTrace()
         })

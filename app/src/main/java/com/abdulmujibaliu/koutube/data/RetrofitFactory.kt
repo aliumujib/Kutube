@@ -3,8 +3,11 @@ package com.abdulmujibaliu.koutube.data
 import com.abdulmujibaliu.koutube.BuildConfig
 import com.abdulmujibaliu.koutube.data.models.ChannelPlayListItems
 import com.abdulmujibaliu.koutube.data.models.ChannelPlayLists
+import com.abdulmujibaliu.koutube.data.models.VideoResult
+import com.abdulmujibaliu.koutube.data.models.YoutubeVideo
 import com.abdulmujibaliu.koutube.data.models.deserializers.ChannelPlaylistsDeserializer
 import com.abdulmujibaliu.koutube.data.models.deserializers.PlaylistsItemsDeserializer
+import com.abdulmujibaliu.koutube.data.models.deserializers.VideoDeserializer
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -30,7 +33,6 @@ class RetrofitFactory {
             return if (retrofit != null) {
 
 
-
                 retrofit as Retrofit
             } else {
 
@@ -44,6 +46,7 @@ class RetrofitFactory {
                 val gson = GsonBuilder()
                         .registerTypeAdapter(ChannelPlayLists::class.java, ChannelPlaylistsDeserializer())
                         .registerTypeAdapter(ChannelPlayListItems::class.java, PlaylistsItemsDeserializer())
+                        .registerTypeAdapter(VideoResult::class.java, VideoDeserializer())
                         .create()
 
                 retrofit = retrofit2.Retrofit.Builder()
@@ -66,7 +69,7 @@ class RetrofitFactory {
                     val originalHttpUrl = original.url()
                     val url = originalHttpUrl.newBuilder()
                             .addQueryParameter("part", "snippet")
-                            .addQueryParameter("maxresults", 50.toString())
+                            .addQueryParameter("maxResults", 50.toString())
                             .addQueryParameter(KutConstants.API_KEY,
                                     KutConstants.API_KEY_VAL)
                             //.addQueryParameter(WSConstants.PAGE_LIMIT, 200.toString())
@@ -81,7 +84,7 @@ class RetrofitFactory {
         private fun createLoggingInterceptor(): HttpLoggingInterceptor {
             val interceptor = HttpLoggingInterceptor()
             if (BuildConfig.DEBUG) {
-                interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC)
+                interceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS)
             } else {
                 interceptor.setLevel(HttpLoggingInterceptor.Level.NONE)
             }
@@ -97,10 +100,31 @@ class KutConstants {
         val API_KEY_VAL = "AIzaSyCzTQAdni52z7AR6vLPBVoM75FES9BIUTw"
         val KEY_ITEMS = "items"
         val KEY_PLAYLIST_ID: String = "id"
+
         val KEY_CONTENT_DETAILS: String = "contentDetails"
+
         val KEY_VIDEO_ID: String = "videoId"
         val SNIPPET: String = "snippet"
         val RECOURCE_ID: String = "resourceId"
+
+        val VIDEO_PUBSLISHED_AT: String = "publishedAt"
+        val VIDEO_TITLE: String = "title"
+        val VIDEO_DESCRIPTION: String = "description"
+        val VIDEO_THUMBNAILS: String = "thumbnails"
+        val VIDEO_MAXRES_IMG: String = "standard"
+        val VIDEO_STANDARD: String = "standard"
+        val VIDEO_MEDIUM_IMG: String = "medium"
+        val VIDEO_HIGH_IMG: String = "high"
+        val VIDEO_DEFAULT_IMG: String = "default"
+
+        val VIDEO_THUMB_URL: String = "url"
+        val VIDEO_CHANNEL_TITLE: String = "channelTitle"
+
+        val VIDEO_VIDEO_DURATION: String = "duration"
+        val VIDEO_VIDEO_STATISTICS: String = "statistics"
+
+        val VIDEO_VIDEO_VIEW_COUNT: String = "viewCount"
+
 
     }
 }

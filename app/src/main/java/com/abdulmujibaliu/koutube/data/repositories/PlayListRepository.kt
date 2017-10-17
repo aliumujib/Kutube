@@ -4,13 +4,10 @@ import android.util.Log
 import com.abdulmujibaliu.koutube.data.PlaylistGetterInterface
 import com.abdulmujibaliu.koutube.data.RetrofitFactory
 import com.abdulmujibaliu.koutube.data.VideoGetterInterface
-import com.abdulmujibaliu.koutube.data.models.ChannelPlayListItems
-import com.abdulmujibaliu.koutube.data.models.ChannelPlayLists
-import com.abdulmujibaliu.koutube.data.models.VideoResult
+import com.abdulmujibaliu.koutube.data.models.*
 import com.abdulmujibaliu.koutube.data.repositories.contracts.RepositoryContracts
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.ReplaySubject
 
@@ -32,7 +29,7 @@ class PlayListRepository : RepositoryContracts.IPlaylistRepository {
     }
 
     fun getChannelsPlayList(channelIDs: List<String>) {
-        val observablesList: MutableList<Observable<ChannelPlayLists>> = mutableListOf()
+        val observablesList: MutableList<Observable<PlayListsResult>> = mutableListOf()
 
         for (channelID in channelIDs) {
             Log.d(TAG, "Getting for channelID" + channelID)
@@ -44,7 +41,7 @@ class PlayListRepository : RepositoryContracts.IPlaylistRepository {
             var playListIDs = mutableListOf<String>()
 
             for (any in dataArray) {
-                playListIDs.addAll((any as ChannelPlayLists).ids)
+                playListIDs.addAll((any as PlayListsResult).ids!!)
             }
 
             playListIDs
@@ -62,7 +59,7 @@ class PlayListRepository : RepositoryContracts.IPlaylistRepository {
 
 
     fun getPlayListsItems(playListIDs: List<String>) {
-        val observablesList: MutableList<Observable<ChannelPlayListItems>> = mutableListOf()
+        val observablesList: MutableList<Observable<PlayListItemsResult>> = mutableListOf()
 
         for (playListID in playListIDs) {
             observablesList.add(playListserviceInstance.getPlaylistItems(playListID).observeOn(AndroidSchedulers.mainThread())
@@ -73,8 +70,8 @@ class PlayListRepository : RepositoryContracts.IPlaylistRepository {
             var videoIDList = mutableListOf<String>()
 
             for (any in dataArray) {
-                //Log.d(TAG, (any as ChannelPlayListItems).videoIds.toString())
-                videoIDList.addAll((any as ChannelPlayListItems).videoIds)
+                //Log.d(TAG, (any as PlayListItem).videoIds.toString())
+                videoIDList.addAll((any as PlayListItemsResult).ids!!)
             }
 
             videoIDList

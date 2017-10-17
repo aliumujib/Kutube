@@ -8,4 +8,5 @@
     <color name="grey">#9E9E9E</color>
     <color name="red">#B0171F</color>
     <color name="toolbar_shadow">#c0c0c0</color>
+    <color name="transparent_black">#99000000</color>
 </resources>

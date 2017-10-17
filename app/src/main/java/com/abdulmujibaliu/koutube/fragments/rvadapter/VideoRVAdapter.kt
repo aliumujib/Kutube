@@ -55,13 +55,13 @@ class VideoRVAdapter(context: Context, videoClickListener: VideoClickListener) :
 
 
         fun bindItem(youtubeVideo: YoutubeVideo, context: Context, videoClickListener: VideoClickListener) {
-            videoTitle.text = youtubeVideo.videoTitle
+            videoTitle.text = youtubeVideo.itemTitle
             posterTitle.text = youtubeVideo.channelName
-            videoDesc.text = youtubeVideo.description
+            videoDesc.text = youtubeVideo.itemDesc
             duration.text = youtubeVideo.getDurationText()
             timeStamp.text = youtubeVideo.getPublishText()
-            Picasso.with(context).load(youtubeVideo.videoThumbnailURL).fit().centerCrop().into(videoImage)
-            Picasso.with(context).load(youtubeVideo.videoThumbnailURL).fit().centerCrop().into(accountThumbnail)
+            Picasso.with(context).load(youtubeVideo.itemImageURL).fit().centerCrop().into(videoImage)
+            Picasso.with(context).load(youtubeVideo.itemImageURL).fit().centerCrop().into(accountThumbnail)
             itemView.setOnClickListener({
                 view ->
                 videoClickListener.onVideoClicked(youtubeVideo)

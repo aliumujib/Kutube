@@ -1,10 +1,7 @@
 package com.abdulmujibaliu.koutube.data
 
 import com.abdulmujibaliu.koutube.BuildConfig
-import com.abdulmujibaliu.koutube.data.models.ChannelPlayListItems
-import com.abdulmujibaliu.koutube.data.models.ChannelPlayLists
-import com.abdulmujibaliu.koutube.data.models.VideoResult
-import com.abdulmujibaliu.koutube.data.models.YoutubeVideo
+import com.abdulmujibaliu.koutube.data.models.*
 import com.abdulmujibaliu.koutube.data.models.deserializers.ChannelPlaylistsDeserializer
 import com.abdulmujibaliu.koutube.data.models.deserializers.PlaylistsItemsDeserializer
 import com.abdulmujibaliu.koutube.data.models.deserializers.VideoDeserializer
@@ -44,8 +41,8 @@ class RetrofitFactory {
                         .build()
 
                 val gson = GsonBuilder()
-                        .registerTypeAdapter(ChannelPlayLists::class.java, ChannelPlaylistsDeserializer())
-                        .registerTypeAdapter(ChannelPlayListItems::class.java, PlaylistsItemsDeserializer())
+                        .registerTypeAdapter(PlayListsResult::class.java, ChannelPlaylistsDeserializer())
+                        .registerTypeAdapter(PlayListItemsResult::class.java, PlaylistsItemsDeserializer())
                         .registerTypeAdapter(VideoResult::class.java, VideoDeserializer())
                         .create()
 
@@ -118,7 +115,7 @@ class KutConstants {
         val VIDEO_DEFAULT_IMG: String = "default"
 
         val VIDEO_THUMB_URL: String = "url"
-        val VIDEO_CHANNEL_TITLE: String = "channelTitle"
+        val VIDEO_CHANNEL_TITLE: String = "channelName"
 
         val VIDEO_VIDEO_DURATION: String = "duration"
         val VIDEO_VIDEO_STATISTICS: String = "statistics"

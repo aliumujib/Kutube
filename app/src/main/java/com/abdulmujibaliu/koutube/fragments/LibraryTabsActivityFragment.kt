@@ -1,32 +1,21 @@
 package com.abdulmujibaliu.koutube.fragments
 
-import android.support.v4.app.Fragment
 import android.os.Bundle
 import android.support.design.widget.CoordinatorLayout
+import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
 import com.abdulmujibaliu.koutube.R
 import com.abdulmujibaliu.koutube.data.models.YoutubeVideo
 import com.abdulmujibaliu.koutube.tabsadapter.VideoTabsAdapter
-import com.abdulmujibaliu.koutube.utils.FullScreenManager
+import com.pierfrancescosoffritti.youtubeplayer.player.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.youtubeplayer.player.YouTubePlayer
 import com.pierfrancescosoffritti.youtubeplayer.player.YouTubePlayerView
 import jp.bglb.bonboru.behaviors.YoutubeLikeBehavior
 import kotlinx.android.synthetic.main.fragment_library_tabs.*
 import kotlinx.android.synthetic.main.video_description.*
-import kotlinx.android.synthetic.main.youtubevideo_player.*
-import kotterknife.bindView
-import com.pierfrancescosoffritti.youtubeplayer.player.AbstractYouTubePlayerListener
-import com.pierfrancescosoffritti.youtubeplayer.player.YouTubePlayer
-import com.pierfrancescosoffritti.youtubeplayer.player.YouTubePlayerInitListener
-import android.content.pm.ActivityInfo
-import android.support.v4.content.ContextCompat
-import android.util.Log
-import com.pierfrancescosoffritti.youtubeplayer.player.YouTubePlayerFullScreenListener
-
-
 
 
 /**
@@ -65,7 +54,19 @@ class LibraryTabsActivityFragment : Fragment(), MainContract.View, YoutubeLikeBe
         media = layoutInflater.inflate(R.layout.youtubevideo_player, rootCordinator, false) as YouTubePlayerView
         description = layoutInflater.inflate(R.layout.video_description, rootCordinator, false)
 
+    }
 
+
+
+    override fun showVideoView(video: YoutubeVideo) {
+
+        if(media?.parent!=null){
+            rootCordinator?.removeView(media)
+        }
+
+        if(description?.parent!=null){
+            rootCordinator?.removeView(description)
+        }
 
         rootCordinator!!.addView(media)
         rootCordinator!!.addView(description)
@@ -73,33 +74,29 @@ class LibraryTabsActivityFragment : Fragment(), MainContract.View, YoutubeLikeBe
         behavior = YoutubeLikeBehavior.from(media)
         behavior?.listener = this
 
-        behavior?.state = YoutubeLikeBehavior.STATE_HIDDEN
-    }
+        //behavior?.state = YoutubeLikeBehavior.STATE_HIDDEN
 
-
-
-    override fun showVideoView(video: YoutubeVideo) {
-        
         media!!.initialize({ initializedYouTubePlayer ->
             player = initializedYouTubePlayer
 
             initializedYouTubePlayer.addListener(object : AbstractYouTubePlayerListener() {
                 override fun onReady() {
                     Log.d(TAG, video.videoID)
-                    initializedYouTubePlayer.loadVideo("g_hg9dbCQy8", 0f)
+                    initializedYouTubePlayer.loadVideo(video.videoID, 0f)
                 }
 
             })
         }, true)
 
-        behavior?.state = YoutubeLikeBehavior.STATE_EXPANDED
+        //behavior?.state = YoutubeLikeBehavior.STATE_EXPANDED
     }
 
 
     override fun onBehaviorStateChanged(newState: Long) {
         if (newState == YoutubeLikeBehavior.STATE_TO_RIGHT || newState == YoutubeLikeBehavior.STATE_TO_LEFT) {
-            root_view.removeView(media)
-            root_view.removeView(video_desc_text)
+            rootCordinator?.removeView(media)
+            rootCordinator?.removeView(description)
+            behavior = null
         }
     }
 }

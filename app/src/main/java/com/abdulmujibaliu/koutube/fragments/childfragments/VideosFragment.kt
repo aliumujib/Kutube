@@ -44,10 +44,10 @@ class VideosFragment : BaseFragment(), VideoClickListener {
 
         //UCpEHs4jtfj1sTo1g-ubDyMg //MTANG
 
-        playListRepo.getPlayVideosForChannels(listOf("UCDPk9MG2RexnOMGTD-YnSnA"))?.subscribe(
+        playListRepo.getPlayVideosForChannels(listOf("UCsooa4yRKGN_zEE8iknghZA"))?.subscribe(
                 { data ->
                     Log.d(TAG, data.toString())
-                    videosRVAdapter!!.addAll(data.videos)
+                    videosRVAdapter!!.addAll(data.items as List<YoutubeVideo>)
                 }, { error ->
             error.printStackTrace()
         })

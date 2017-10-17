@@ -9,6 +9,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import java.lang.reflect.Type
 import org.joda.time.format.DateTimeFormat
+import org.joda.time.format.DateTimeFormatter
 
 
 /**
@@ -31,7 +32,10 @@ open abstract class BaseDeserializer : JsonDeserializer<BaseModelWrapper> {
             val dateTime = dtf.parseDateTime(snippetObject?.asJsonObject?.get(KutConstants.VIDEO_PUBSLISHED_AT)?.asString)
             val title = snippetObject?.asJsonObject?.get(KutConstants.VIDEO_TITLE)?.asString
             val desc = snippetObject?.asJsonObject?.get(KutConstants.VIDEO_DESCRIPTION)?.asString
-
+            if (snippetObject!!.asJsonObject.get(KutConstants.VIDEO_CHANNEL_NAME) != null) {
+                val channelName = snippetObject.asJsonObject.get(KutConstants.VIDEO_CHANNEL_TITLE).asString
+                baseModel.channelName = channelName
+            }
             //Log.d(TAG, "VIDEO DATETIME $dateTime VIDNAME: $title DESC: $desc")
 
             baseModel.datePublished = dateTime
@@ -43,10 +47,7 @@ open abstract class BaseDeserializer : JsonDeserializer<BaseModelWrapper> {
 
                 val thumbNailsObj = snippetObject.asJsonObject?.get(KutConstants.VIDEO_THUMBNAILS)
 
-                if (snippetObject.asJsonObject.get(KutConstants.VIDEO_CHANNEL_TITLE) != null) {
-                    val channelName = snippetObject.asJsonObject.get(KutConstants.VIDEO_CHANNEL_TITLE).asString
-                    baseModel.channelName = channelName
-                }
+
 
 
                 if (thumbNailsObj != null) {
@@ -209,11 +210,14 @@ class VideoDeserializer : BaseDeserializer() {
         super.findDetails(json, youtubeVideo)
 
         youtubeVideo.videoID = json!!.asJsonObject.get(KutConstants.KEY_ITEM_ID).asString
-        var dtf = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+
+        var dtf: DateTimeFormatter
 
         if (json.asJsonObject?.getAsJsonObject(KutConstants.SNIPPET) != null && !json.asJsonObject.getAsJsonObject(KutConstants.SNIPPET).isJsonNull) {
 
             dtf = DateTimeFormat.forPattern("'PT'mm'M'ss'S'")
+            val channelName = json.asJsonObject?.getAsJsonObject(KutConstants.SNIPPET)!!.asJsonObject.get(KutConstants.VIDEO_CHANNEL_TITLE).asString
+            youtubeVideo.channelName = channelName
 
             if (json.asJsonObject.get(KutConstants.KEY_CONTENT_DETAILS) != null) {
                 try {

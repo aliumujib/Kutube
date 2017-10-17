@@ -115,7 +115,9 @@ class KutConstants {
         val VIDEO_DEFAULT_IMG: String = "default"
 
         val VIDEO_THUMB_URL: String = "url"
-        val VIDEO_CHANNEL_TITLE: String = "channelName"
+        val VIDEO_CHANNEL_NAME: String = "channelName"
+
+        val VIDEO_CHANNEL_TITLE: String = "channelTitle"
 
         val VIDEO_VIDEO_DURATION: String = "duration"
         val VIDEO_VIDEO_STATISTICS: String = "statistics"

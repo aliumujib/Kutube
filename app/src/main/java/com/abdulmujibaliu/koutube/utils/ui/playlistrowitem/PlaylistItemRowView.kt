@@ -9,36 +9,30 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
 import com.abdulmujibaliu.koutube.R
+import com.abdulmujibaliu.koutube.data.models.BaseModel
 import com.abdulmujibaliu.koutube.data.models.PlayListItem
-import com.abdulmujibaliu.koutube.data.models.YoutubeVideo
+import com.abdulmujibaliu.koutube.fragments.childfragments.PlayListItemClickListener
+import com.abdulmujibaliu.koutube.utils.ui.playlistrowitem.adapter.PlayListRowRVAdapter
 
 
 /**
  * Created by abdulmujibaliu on 10/17/17.
  */
 
-/*
-internal class MicrositeRowView : LinearLayout {
-
-
-    private var mSectionMoreClickListener: MicrositeRecyclerAdapter.SectionMoreClickListener? = null
-    private var sectionItem: YoutubeVideo? = null
-
+ class PlayListItemRowView : LinearLayout {
 
     private val TAG = javaClass.simpleName
     private var mView: View? = null
     private var mSectionTitleView: TextView? = null
-    private var mSectionDescription: TextView? = null
-    private var mSeeMoreBtn: TextView? = null
     private var mYoutubeVideosRV: RecyclerView? = null
 
-    protected var mAttachmentsAdapter: ProductItemRecyclerViewAdapter? = null
+    protected var mAttachmentsAdapter: PlayListRowRVAdapter? = null
     protected var mLayoutManager: RecyclerView.LayoutManager? = null
 
-    private var sectionTitle: String? = null
-    protected var mDataSource: List<YoutubeVideo> = ArrayList()
+    private var mSectionTitle: String? = null
+    protected var mDataSource: List<BaseModel> = ArrayList()
+    var mListener: PlayListItemClickListener? = null
 
-    constructor(context: Context) : super(context) {}
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
 
@@ -46,7 +40,7 @@ internal class MicrositeRowView : LinearLayout {
                 R.styleable.PlayListRowView, 0, 0)
 
 
-        sectionTitle = a.getString(R.styleable.PlayListRowView_section_title)
+        mSectionTitle = a.getString(R.styleable.PlayListRowView_section_title)
 
         a.recycle()
 
@@ -55,67 +49,51 @@ internal class MicrositeRowView : LinearLayout {
 
         mView = inflater.inflate(R.layout.playlist_item_row, this, true)
 
-        mSectionTitleView = mView.findViewById(R.id.section_title)
-        mYoutubeVideosRV = mView.findViewById(R.id.section_items_recycler)
+        mSectionTitleView = mView!!.findViewById(R.id.section_title)
+        mYoutubeVideosRV = mView!!.findViewById(R.id.section_items_recycler)
 
         initRV()
 
-        mSeeMoreBtn.setOnClickListener { v -> mSectionMoreClickListener!!.onSectionItemClick(sectionItem) }
 
-        if (sectionTitle != null && !sectionTitle!!.matches("".toRegex()))
-            mSectionTitleView.text = sectionTitle
+        if (mSectionTitle != null && !mSectionTitle!!.matches("".toRegex()))
+            mSectionTitleView!!.text = mSectionTitle
 
-        if (sectionDescription != null && !sectionDescription!!.matches("".toRegex()))
-            mSectionDescription.text = sectionDescription
-
-
-    }
-
-    fun getSectionDescription(): String? {
-        return sectionDescription
-    }
-
-    fun setSectionDescription(sectionDescription: String) {
-        this.sectionDescription = sectionDescription
-        mSectionDescription.text = sectionDescription
-    }
-
-    fun setOnMoreClickListener(sectionMoreClickListener: MicrositeRecyclerAdapter.SectionMoreClickListener) {
-
-        mSectionMoreClickListener = sectionMoreClickListener
     }
 
     fun getSectionTitle(): String? {
-        return sectionTitle
+        return mSectionTitle
     }
 
     fun setSectionTitle(sectionTitle: String) {
-        this.sectionTitle = sectionTitle
-        mSectionTitleView.text = sectionTitle
+        this.mSectionTitle = sectionTitle
+        mSectionTitleView!!.text = sectionTitle
     }
 
-    fun getmDataSource(): List<YoutubeVideo> {
+    fun getmDataSource(): List<BaseModel> {
         return mDataSource
     }
 
-    fun setmDataSource(youtubeVideos: MutableList<YoutubeVideo>) {
+    fun setmDataSource(youtubeVideos: List<BaseModel>) {
         this.mDataSource = youtubeVideos
-        this.mAttachmentsAdapter.addNewData(youtubeVideos)
-        mAttachmentsAdapter.reloadData()
+        this.mAttachmentsAdapter!!.addAll(youtubeVideos)
     }
 
     protected fun initRV() {
         mLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        mProductItemsRV.layoutManager = mLayoutManager
-        mProductItemsRV.setHasFixedSize(true)
-        mProductItemsRV.isNestedScrollingEnabled = false
-        mAttachmentsAdapter = ProductItemRecyclerViewAdapter(context, mDataSource) { productItem -> }
-        mProductItemsRV.adapter = mAttachmentsAdapter
-        mAttachmentsAdapter.reloadData()
+        mYoutubeVideosRV!!.layoutManager = mLayoutManager
+        mYoutubeVideosRV!!.setHasFixedSize(true)
+        mYoutubeVideosRV!!.isNestedScrollingEnabled = false
+        try {
+            mAttachmentsAdapter = PlayListRowRVAdapter(context, mListener)
+            mYoutubeVideosRV!!.adapter = mAttachmentsAdapter
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        //mAttachmentsAdapter.reloadData()
     }
 
     fun setSectionItem(sectionItem: PlayListItem) {
-        this.sectionItem = sectionItem
+        //this.sectionItem = sectionItem
         //this.setmDataSource(sectionItem.getProductItems())
         //this.setSectionTitle(sectionItem.get())
         //this.setSectionDescription(sectionItem.getSectionDesc())
@@ -124,4 +102,4 @@ internal class MicrositeRowView : LinearLayout {
     companion object {
         var INVALID_REQUEST_CODE_NUMBER = -2
     }
-}*/
+}

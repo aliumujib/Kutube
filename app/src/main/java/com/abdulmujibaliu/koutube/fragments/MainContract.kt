@@ -9,7 +9,7 @@ interface MainContract {
 
     interface View{
         fun getPresenter  () : Presenter
-        fun showVideoView(video: YoutubeVideo)
+        fun showVideoView(video: YoutubeVideo, data: List<YoutubeVideo>)
     }
 
     interface Presenter

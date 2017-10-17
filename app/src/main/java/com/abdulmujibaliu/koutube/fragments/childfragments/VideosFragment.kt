@@ -14,8 +14,8 @@ import kotlinx.android.synthetic.main.fragment_base.*
 
 class VideosFragment : BaseFragment(), VideoClickListener {
 
-    override fun onVideoClicked(youtubeVideo: YoutubeVideo) {
-        parentView?.showVideoView(youtubeVideo)
+    override fun onVideoClicked(youtubeVideo: YoutubeVideo, data: List<YoutubeVideo>) {
+        parentView?.showVideoView(youtubeVideo, data)
     }
 
     var videosRVAdapter: VideoRVAdapter? = null
@@ -68,5 +68,5 @@ class VideosFragment : BaseFragment(), VideoClickListener {
 
 
 interface VideoClickListener {
-    fun onVideoClicked(youtubeVideo: YoutubeVideo)
+    fun onVideoClicked(youtubeVideo: YoutubeVideo, relatedVideos: List<YoutubeVideo>)
 }

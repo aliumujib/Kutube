@@ -43,7 +43,7 @@ class VideoRVAdapter(context: Context, videoClickListener: VideoClickListener) :
         return this.data.size
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val videoTitle: TextView = itemView.video_title
         val posterTitle: TextView = itemView.poster_name
         val timeStamp: TextView = itemView.post_time_stamp
@@ -64,7 +64,7 @@ class VideoRVAdapter(context: Context, videoClickListener: VideoClickListener) :
             Picasso.with(context).load(youtubeVideo.itemImageURL).fit().centerCrop().into(accountThumbnail)
             itemView.setOnClickListener({
                 view ->
-                videoClickListener.onVideoClicked(youtubeVideo)
+                videoClickListener.onVideoClicked(youtubeVideo, data)
             })
         }
 

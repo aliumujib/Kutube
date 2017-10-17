@@ -8,65 +8,60 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.abdulmujibaliu.koutube.R
+import com.abdulmujibaliu.koutube.data.models.BaseModel
+import com.abdulmujibaliu.koutube.data.models.PlayListItem
 import com.abdulmujibaliu.koutube.data.models.YoutubeVideo
+import com.abdulmujibaliu.koutube.fragments.childfragments.PlayListItemClickListener
 import com.abdulmujibaliu.koutube.fragments.childfragments.VideoClickListener
-import com.abdulmujibaliu.koutube.fragments.rvadapter.VideoRVAdapter
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_video_card.view.*
+import kotlinx.android.synthetic.main.play_list_item.view.*
 
 /**
  * Created by abdulmujibaliu on 10/17/17.
  */
 
-class PlayListRowRVAdapter (context: Context, videoClickListener: VideoClickListener) : RecyclerView.Adapter<PlayListRowRVAdapter.ViewHolder>() {
+class PlayListRowRVAdapter(context: Context, playListItemClickListener: PlayListItemClickListener?) : RecyclerView.Adapter<PlayListRowRVAdapter.ViewHolder>() {
 
     val context = context;
-    val videoClickListener = videoClickListener
+    val videoClickListener = playListItemClickListener
 
-    private var data: MutableList<YoutubeVideo> = mutableListOf()
+    private var data: MutableList<BaseModel> = mutableListOf()
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         holder?.bindItem(data[position], context, videoClickListener)
     }
 
 
-    fun addAll(data: List<YoutubeVideo>) {
+    fun addAll(data: List<BaseModel>) {
         this.data.addAll(data)
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.item_video_card, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.play_list_item, parent, false)
         return ViewHolder(view)
     }
 
     override fun getItemCount(): Int {
-        return this.data.size
+        if(data.isEmpty()){
+            return 0
+        }else{
+            return this.data.size
+        }
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val videoTitle: TextView = itemView.video_title
-        val posterTitle: TextView = itemView.poster_name
-        val timeStamp: TextView = itemView.post_time_stamp
-        val videoDesc: TextView = itemView.video_desc
-        val duration: TextView = itemView.duration
-
-        val accountThumbnail: ImageView = itemView.channel_image
-        val videoImage: ImageView = itemView.video_image
+        val videoTitle: TextView = itemView.item_title
+        val videoImage: ImageView = itemView.item_image
 
 
-        fun bindItem(youtubeVideo: YoutubeVideo, context: Context, videoClickListener: VideoClickListener) {
-//            videoTitle.text = youtubeVideo.videoTitle
-//            posterTitle.text = youtubeVideo.channelName
-//            videoDesc.text = youtubeVideo.description
-//            duration.text = youtubeVideo.getDurationText()
-//            timeStamp.text = youtubeVideo.getPublishText()
-//            Picasso.with(context).load(youtubeVideo.videoThumbnailURL).fit().centerCrop().into(videoImage)
-//            Picasso.with(context).load(youtubeVideo.videoThumbnailURL).fit().centerCrop().into(accountThumbnail)
-//            itemView.setOnClickListener({
-//                view ->
-//                videoClickListener.onVideoClicked(youtubeVideo)
-//            })
+        fun bindItem(playListItem: BaseModel, context: Context, playListItemClickListener: PlayListItemClickListener?) {
+            videoTitle.text = playListItem.itemTitle
+            Picasso.with(context).load(playListItem.itemImageURL).fit().centerCrop().into(videoImage)
+            itemView.setOnClickListener({ view ->
+                //playListItemClickListener?.onPlayListClick(playListItem as PlayListItem)
+            })
         }
 
 

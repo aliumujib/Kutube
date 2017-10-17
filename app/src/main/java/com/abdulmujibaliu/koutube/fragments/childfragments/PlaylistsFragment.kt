@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.abdulmujibaliu.koutube.R
+import com.abdulmujibaliu.koutube.data.models.PlayListItem
 
 class PlaylistsFragment : BaseFragment() {
 
@@ -35,4 +36,9 @@ class PlaylistsFragment : BaseFragment() {
             return fragment
         }
     }
+}
+
+
+open interface PlayListItemClickListener {
+    fun onPlayListClick(playListItem: PlayListItem)
 }

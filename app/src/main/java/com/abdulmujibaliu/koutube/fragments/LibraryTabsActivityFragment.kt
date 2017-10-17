@@ -3,6 +3,7 @@ package com.abdulmujibaliu.koutube.fragments
 import android.os.Bundle
 import android.support.design.widget.CoordinatorLayout
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,12 +11,12 @@ import android.view.ViewGroup
 import com.abdulmujibaliu.koutube.R
 import com.abdulmujibaliu.koutube.data.models.YoutubeVideo
 import com.abdulmujibaliu.koutube.tabsadapter.VideoTabsAdapter
+import com.abdulmujibaliu.koutube.utils.ui.videodetailsview.VideoDetailsView
 import com.pierfrancescosoffritti.youtubeplayer.player.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.youtubeplayer.player.YouTubePlayer
 import com.pierfrancescosoffritti.youtubeplayer.player.YouTubePlayerView
 import jp.bglb.bonboru.behaviors.YoutubeLikeBehavior
 import kotlinx.android.synthetic.main.fragment_library_tabs.*
-import kotlinx.android.synthetic.main.video_description.*
 
 
 /**
@@ -46,7 +47,8 @@ class LibraryTabsActivityFragment : Fragment(), MainContract.View, YoutubeLikeBe
         rootCordinator = view!!.findViewById(R.id.root_view)
 
         val videoTabsAdapter = VideoTabsAdapter(childFragmentManager)
-        toolbar.setTitle("Kutube")
+        toolbar.setTitle("Koutube")
+        toolbar.setTitleTextColor(ContextCompat.getColor(context, R.color.colorAccent))
         container.adapter = videoTabsAdapter
 
         tabs.setupWithViewPager(container)
@@ -58,7 +60,7 @@ class LibraryTabsActivityFragment : Fragment(), MainContract.View, YoutubeLikeBe
 
 
 
-    override fun showVideoView(video: YoutubeVideo) {
+    override fun showVideoView(video: YoutubeVideo, data: List<YoutubeVideo>) {
 
         if(media?.parent!=null){
             rootCordinator?.removeView(media)
@@ -74,6 +76,10 @@ class LibraryTabsActivityFragment : Fragment(), MainContract.View, YoutubeLikeBe
         behavior = YoutubeLikeBehavior.from(media)
         behavior?.listener = this
 
+        val videoDetailsView: VideoDetailsView = description!!.findViewById(R.id.video_details)
+        videoDetailsView.setVideos(video, data)
+
+        Log.d(TAG, "VID ID: ${video.videoID}")
         //behavior?.state = YoutubeLikeBehavior.STATE_HIDDEN
 
         media!!.initialize({ initializedYouTubePlayer ->
@@ -84,7 +90,6 @@ class LibraryTabsActivityFragment : Fragment(), MainContract.View, YoutubeLikeBe
                     Log.d(TAG, video.videoID)
                     initializedYouTubePlayer.loadVideo(video.videoID, 0f)
                 }
-
             })
         }, true)
 

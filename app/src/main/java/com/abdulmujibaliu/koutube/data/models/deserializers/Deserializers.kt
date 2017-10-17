@@ -42,7 +42,7 @@ class ChannelPlaylistsDeserializer : JsonDeserializer<ChannelPlayLists> {
         if (jsonArray != null && !jsonArray.isJsonNull() && !(jsonArray.size() == 0)) {
 
             for (jsonElement in jsonArray) {
-                val itemID = jsonElement.asJsonObject.get(KutConstants.KEY_PLAYLIST_ID).asString.replace("\"", "")
+                val itemID = jsonElement.asJsonObject.get(KutConstants.KEY_ITEM_ID).asString.replace("\"", "")
                 Log.d(TAG, itemID)
                 idList?.add(itemID)
             }
@@ -76,7 +76,7 @@ class PlaylistsItemsDeserializer : JsonDeserializer<ChannelPlayListItems> {
         if (jsonArray != null && !jsonArray.isJsonNull() && !(jsonArray.size() == 0)) {
 
             for (jsonElement in jsonArray) {
-                val itemID = jsonElement.asJsonObject.get(KutConstants.KEY_PLAYLIST_ID).asString.replace("\"", "")
+                val itemID = jsonElement.asJsonObject.get(KutConstants.KEY_ITEM_ID).asString.replace("\"", "")
                 Log.d(TAG, "PLAYLISTITEMID $itemID")
 
                 val snippet = jsonElement.asJsonObject.get(KutConstants.SNIPPET)
@@ -120,7 +120,9 @@ class VideoDeserializer : JsonDeserializer<VideoResult> {
 
     fun findDetails(json: JsonElement?, youtubeVideo: YoutubeVideo) {
 
-        if (json?.asJsonObject?.getAsJsonObject(KutConstants.SNIPPET) != null && !json.asJsonObject.getAsJsonObject(KutConstants.SNIPPET).isJsonNull) {
+        youtubeVideo.videoID = json!!.asJsonObject.get(KutConstants.KEY_ITEM_ID).asString
+
+        if (json.asJsonObject?.getAsJsonObject(KutConstants.SNIPPET) != null && !json.asJsonObject.getAsJsonObject(KutConstants.SNIPPET).isJsonNull) {
             val snippetObject: JsonElement? = json.asJsonObject?.getAsJsonObject(KutConstants.SNIPPET)
             var dtf = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
 
@@ -128,7 +130,7 @@ class VideoDeserializer : JsonDeserializer<VideoResult> {
             val title = snippetObject?.asJsonObject?.get(KutConstants.VIDEO_TITLE)?.asString
             val desc = snippetObject?.asJsonObject?.get(KutConstants.VIDEO_DESCRIPTION)?.asString
 
-            Log.d(TAG, "VIDEO DATETIME $dateTime VIDNAME: $title DESC: $desc")
+            //Log.d(TAG, "VIDEO DATETIME $dateTime VIDNAME: $title DESC: $desc")
 
             youtubeVideo.datePublished = dateTime
             youtubeVideo.videoTitle = title
@@ -150,7 +152,7 @@ class VideoDeserializer : JsonDeserializer<VideoResult> {
                     val medium = thumbNailsObj.asJsonObject?.get(KutConstants.VIDEO_MEDIUM_IMG)
                     val high = thumbNailsObj.asJsonObject?.get(KutConstants.VIDEO_HIGH_IMG)
 
-                    Log.d(TAG, standard.toString())
+                    //Log.d(TAG, standard.toString())
 
                     var resURL: String? = null
 
@@ -164,21 +166,24 @@ class VideoDeserializer : JsonDeserializer<VideoResult> {
 
                     youtubeVideo.videoThumbnailURL = resURL
                 }
+            }
 
 
-                dtf = DateTimeFormat.forPattern("'PT'mm'M'ss'S'")
+            dtf = DateTimeFormat.forPattern("'PT'mm'M'ss'S'")
 
-                if (snippetObject.asJsonObject.get(KutConstants.KEY_CONTENT_DETAILS) != null) {
-                    val duration = dtf.parseLocalTime(snippetObject.asJsonObject.
+            if (json.asJsonObject.get(KutConstants.KEY_CONTENT_DETAILS) != null) {
+                try {
+                    val duration = dtf.parseLocalTime(json.asJsonObject.
                             get(KutConstants.KEY_CONTENT_DETAILS).asJsonObject.get(KutConstants.VIDEO_VIDEO_DURATION).asString)
                     youtubeVideo.duration = duration
+                }catch (e: Exception){
+                    e.printStackTrace()
                 }
+            }
 
-                if (snippetObject.asJsonObject.get(KutConstants.VIDEO_VIDEO_STATISTICS) != null) {
-                    youtubeVideo.numberOfViews = snippetObject.asJsonObject.get(KutConstants.VIDEO_VIDEO_STATISTICS)
-                            .asJsonObject.get(KutConstants.VIDEO_VIDEO_VIEW_COUNT).asInt
-                }
-
+            if (json.asJsonObject.get(KutConstants.VIDEO_VIDEO_STATISTICS) != null) {
+                youtubeVideo.numberOfViews = json.asJsonObject.get(KutConstants.VIDEO_VIDEO_STATISTICS)
+                        .asJsonObject.get(KutConstants.VIDEO_VIDEO_VIEW_COUNT).asInt
             }
 
         }

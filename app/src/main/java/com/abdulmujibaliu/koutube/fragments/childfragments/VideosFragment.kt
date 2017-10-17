@@ -5,13 +5,18 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
+import com.abdulmujibaliu.koutube.data.models.YoutubeVideo
 import com.abdulmujibaliu.koutube.data.repositories.PlayListRepository
 import com.abdulmujibaliu.koutube.data.repositories.contracts.RepositoryContracts
 import com.abdulmujibaliu.koutube.fragments.rvadapter.VideoRVAdapter
 import kotlinx.android.synthetic.main.fragment_base.*
 
 
-class VideosFragment : BaseFragment() {
+class VideosFragment : BaseFragment(), VideoClickListener {
+
+    override fun onVideoClicked(youtubeVideo: YoutubeVideo) {
+        parentView?.showVideoView(youtubeVideo)
+    }
 
     var videosRVAdapter: VideoRVAdapter? = null
 
@@ -29,44 +34,17 @@ class VideosFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        videosRVAdapter = VideoRVAdapter(context)
+        videosRVAdapter = VideoRVAdapter(context, this)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = videosRVAdapter
         videosRVAdapter?.notifyDataSetChanged()
 
 
-//      var playListserviceInstance =  RetrofitFactory.getInstance().create(PlaylistGetterInterface::class.java)
-//
-//        playListserviceInstance.getPlaylistItems("PLP2VuCguZpsnJadOEvHTONtjpSdKMykRp")
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe({
-//                    data->
-//
-//                    Log.d(TAG, data)
-//                }, {
-//                    error->
-//
-//                    error.printStackTrace()
-//                })
-//
-//
-//        playListserviceInstance.getPlaylistsForChannel("UC_x5XG1OV2P6uZZ5FSM9Ttw")
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe({
-//                    data ->
-//                    run {
-//                        Log.d(TAG, data.ids.size.toString())
-//                    }
-//                }, {
-//                    t: Throwable? ->
-//                    t.printStackTrace()
-//                })
-
         val playListRepo: RepositoryContracts.IPlaylistRepository = PlayListRepository.getInstance()!!
 
-        playListRepo.getPlayVideosForChannels(listOf("UCpEHs4jtfj1sTo1g-ubDyMg"))?.subscribe(
+        //UCpEHs4jtfj1sTo1g-ubDyMg //MTANG
+
+        playListRepo.getPlayVideosForChannels(listOf("UCDPk9MG2RexnOMGTD-YnSnA"))?.subscribe(
                 { data ->
                     Log.d(TAG, data.toString())
                     videosRVAdapter!!.addAll(data.videos)
@@ -86,4 +64,9 @@ class VideosFragment : BaseFragment() {
         }
     }
 
+}
+
+
+interface VideoClickListener {
+    fun onVideoClicked(youtubeVideo: YoutubeVideo)
 }

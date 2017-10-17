@@ -19,7 +19,7 @@ class VideoResult {
 
 class YoutubeVideo {
 
-    @SerializedName("id")
+    //@SerializedName("id")
     var videoID: String? = null
 
     var datePublished: DateTime? = null

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/description_height"
+    app:layout_behavior="@string/coordinator_behaviors_youtube_follow_behavior"
+    app:mediaHeight="@dimen/media_height"
+    app:shrinkRate="@integer/media_shrink_rate"
+    app:ylb_marginBottom="@dimen/margin_bottom"
+    android:background="@android:color/white"
+    app:ylb_marginRight="@dimen/margin_right"
+    >
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:id="@+id/video_desc_text"
+        android:text="@string/dummy_text"
+        />
+  </LinearLayout>
+</ScrollView>

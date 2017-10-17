@@ -24,6 +24,10 @@ allprojects {
     repositories {
         jcenter()
         mavenCentral()
+        maven {
+            url  "http://dl.bintray.com/ttymsd/maven"
+        }
+        maven { url "https://jitpack.io" }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         maven {
             url 'https://maven.google.com/'
@@ -35,7 +39,7 @@ allprojects {
 ext {
     // sdk and tools
     compileSdkVersion = 26
-    minSdkVersion = 16
+    minSdkVersion = 17
     targetSdkVersion = 22
     buildToolsVersion = '26.0.1'
 

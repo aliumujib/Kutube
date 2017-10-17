@@ -16,16 +16,34 @@ import com.abdulmujibaliu.koutube.fragments.MainContract
  */
 abstract class BaseFragment : Fragment() {
 
-    protected val parentView: MainContract.View ? = null
+    protected var parentView: MainContract.View ? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater!!.inflate(R.layout.fragment_base, container, false)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        onAttachToParentFragment(parentFragment)
+    }
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+    }
+
+    // In the child fragment.
+    private fun onAttachToParentFragment(fragment: Fragment) {
+        try {
+            parentView = fragment as MainContract.View
+
+        } catch (e: ClassCastException) {
+            throw ClassCastException(
+                    fragment.toString() + " must implement MainContract.View")
+        }
 
     }
 

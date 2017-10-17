@@ -68,7 +68,7 @@ class RetrofitFactory {
                     val original = chain.request()
                     val originalHttpUrl = original.url()
                     val url = originalHttpUrl.newBuilder()
-                            .addQueryParameter("part", "snippet")
+                            .addQueryParameter("part", "snippet,contentDetails")
                             .addQueryParameter("maxResults", 50.toString())
                             .addQueryParameter(KutConstants.API_KEY,
                                     KutConstants.API_KEY_VAL)
@@ -99,7 +99,7 @@ class KutConstants {
         val API_KEY = "key"
         val API_KEY_VAL = "AIzaSyCzTQAdni52z7AR6vLPBVoM75FES9BIUTw"
         val KEY_ITEMS = "items"
-        val KEY_PLAYLIST_ID: String = "id"
+        val KEY_ITEM_ID: String = "id"
 
         val KEY_CONTENT_DETAILS: String = "contentDetails"
 

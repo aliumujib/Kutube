@@ -1,17 +1,17 @@
 package com.abdulmujibaliu.koutube.fragments.childfragments
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.view.LayoutInflater
+import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import android.view.ViewGroup
-
-import com.abdulmujibaliu.koutube.R
 import com.abdulmujibaliu.koutube.data.models.PlayListItem
+import com.abdulmujibaliu.koutube.fragments.rvadapter.PlaylistRVAdapter
+import kotlinx.android.synthetic.main.fragment_base.*
 
 class PlaylistsFragment : BaseFragment() {
+
+    var playlistRVAdapter: PlaylistRVAdapter? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,6 +19,25 @@ class PlaylistsFragment : BaseFragment() {
         if (arguments != null) {
 
         }
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        playlistRVAdapter = PlaylistRVAdapter(context, this)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = playlistRVAdapter
+        playlistRVAdapter?.notifyDataSetChanged()
+
+
+        dataSource.getPlayListObservable()?.subscribe({
+            data->
+                playlistRVAdapter?.addAll(data)
+        }, {
+            error->
+            error.printStackTrace()
+        })
+
     }
 
 

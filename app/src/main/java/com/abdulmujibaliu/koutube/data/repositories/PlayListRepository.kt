@@ -15,17 +15,25 @@ import io.reactivex.subjects.ReplaySubject
  * Created by abdulmujibaliu on 10/16/17.
  */
 class PlayListRepository : RepositoryContracts.IPlaylistRepository {
+    override fun getVideosObservable(): Observable<VideoResult>? {
+        return videosListSubject
+    }
+
+    override fun getPlayListObservable(): Observable<List<PlayListItemsResult>>? {
+        return playListSubject
+    }
+
     val TAG = javaClass.simpleName
 
     var playListserviceInstance = RetrofitFactory.getInstance().create(PlaylistGetterInterface::class.java)
     var videosServiceInstance = RetrofitFactory.getInstance().create(VideoGetterInterface::class.java)
 
 
-    var playListSubject = ReplaySubject.create<VideoResult>()
+    var videosListSubject = ReplaySubject.create<VideoResult>()
+    var playListSubject = ReplaySubject.create<List<PlayListItemsResult>>()
 
-    override fun getPlayVideosForChannels(channelIDs: List<String>): ReplaySubject<VideoResult>? {
+    override fun getPlayListsAndVideosForChannels(channelIDs: List<String>) {
         getChannelsPlayList(channelIDs)
-        return playListSubject
     }
 
     fun getChannelsPlayList(channelIDs: List<String>) {
@@ -33,7 +41,8 @@ class PlayListRepository : RepositoryContracts.IPlaylistRepository {
 
         for (channelID in channelIDs) {
             Log.d(TAG, "Getting for channelID" + channelID)
-            observablesList.add(playListserviceInstance.getPlaylistsForChannel(channelID).observeOn(AndroidSchedulers.mainThread())
+            observablesList.add(playListserviceInstance.getPlaylistsForChannel(channelID)
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io()))
         }
 
@@ -68,12 +77,14 @@ class PlayListRepository : RepositoryContracts.IPlaylistRepository {
 
         Observable.zip(observablesList) { dataArray ->
             var videoIDList = mutableListOf<String>()
-
+            var playListItems = mutableListOf<PlayListItemsResult>()
             for (any in dataArray) {
                 //Log.d(TAG, (any as PlayListItem).videoIds.toString())
                 videoIDList.addAll((any as PlayListItemsResult).ids!!)
+                playListItems.add(any)
             }
 
+            playListSubject.onNext(playListItems)
             videoIDList
 
         }.subscribe({ data ->
@@ -90,8 +101,8 @@ class PlayListRepository : RepositoryContracts.IPlaylistRepository {
                 }
             }
 
-            //Log.d(TAG, videoIDs)
             getVideoItems(videoIDs!!)
+
         }, { throwable ->
 
             throwable.printStackTrace()
@@ -104,7 +115,7 @@ class PlayListRepository : RepositoryContracts.IPlaylistRepository {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ data ->
-                    playListSubject.onNext(data)
+                    videosListSubject.onNext(data)
                 }, { throwable ->
                     throwable.printStackTrace()
                 })

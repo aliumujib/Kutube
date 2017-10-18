@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import com.abdulmujibaliu.koutube.R
 import com.abdulmujibaliu.koutube.data.models.BaseModel
 import com.abdulmujibaliu.koutube.data.models.PlayListItem
+import com.abdulmujibaliu.koutube.data.models.PlayListItemsResult
 import com.abdulmujibaliu.koutube.fragments.childfragments.PlayListItemClickListener
 import com.abdulmujibaliu.koutube.utils.ui.playlistrowitem.adapter.PlayListRowRVAdapter
 
@@ -19,7 +20,7 @@ import com.abdulmujibaliu.koutube.utils.ui.playlistrowitem.adapter.PlayListRowRV
  * Created by abdulmujibaliu on 10/17/17.
  */
 
- class PlayListItemRowView : LinearLayout {
+class PlayListItemRowView : LinearLayout {
 
     private val TAG = javaClass.simpleName
     private var mView: View? = null
@@ -73,6 +74,11 @@ import com.abdulmujibaliu.koutube.utils.ui.playlistrowitem.adapter.PlayListRowRV
         return mDataSource
     }
 
+    fun setPlayListItemResult(playListItemResult: PlayListItemsResult) {
+        this.setmDataSource(playListItemResult.items)
+        this.setSectionTitle("${playListItemResult.items[0].itemTitle} (${playListItemResult.items.size} videos)" )
+    }
+
     fun setmDataSource(youtubeVideos: List<BaseModel>) {
         this.mDataSource = youtubeVideos
         this.mAttachmentsAdapter!!.addAll(youtubeVideos)
@@ -90,13 +96,6 @@ import com.abdulmujibaliu.koutube.utils.ui.playlistrowitem.adapter.PlayListRowRV
             e.printStackTrace()
         }
         //mAttachmentsAdapter.reloadData()
-    }
-
-    fun setSectionItem(sectionItem: PlayListItem) {
-        //this.sectionItem = sectionItem
-        //this.setmDataSource(sectionItem.getProductItems())
-        //this.setSectionTitle(sectionItem.get())
-        //this.setSectionDescription(sectionItem.getSectionDesc())
     }
 
     companion object {

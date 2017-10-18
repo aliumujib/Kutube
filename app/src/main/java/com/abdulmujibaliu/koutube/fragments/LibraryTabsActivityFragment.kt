@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.abdulmujibaliu.koutube.R
 import com.abdulmujibaliu.koutube.data.models.YoutubeVideo
+import com.abdulmujibaliu.koutube.data.repositories.PlayListRepository
+import com.abdulmujibaliu.koutube.data.repositories.contracts.RepositoryContracts
 import com.abdulmujibaliu.koutube.tabsadapter.VideoTabsAdapter
 import com.abdulmujibaliu.koutube.utils.ui.videodetailsview.VideoDetailsView
 import com.pierfrancescosoffritti.youtubeplayer.player.AbstractYouTubePlayerListener
@@ -29,7 +31,6 @@ class LibraryTabsActivityFragment : Fragment(), MainContract.View, YoutubeLikeBe
     val TAG = javaClass.simpleName
     var rootCordinator: CoordinatorLayout? = null
     private var player: YouTubePlayer? = null
-    private var behavior: YoutubeLikeBehavior<YouTubePlayerView>? = null
 
     override fun getPresenter(): MainContract.Presenter {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -53,27 +54,30 @@ class LibraryTabsActivityFragment : Fragment(), MainContract.View, YoutubeLikeBe
 
         tabs.setupWithViewPager(container)
 
-        media = layoutInflater.inflate(R.layout.youtubevideo_player, rootCordinator, false) as YouTubePlayerView
-        description = layoutInflater.inflate(R.layout.video_description, rootCordinator, false)
 
+        val playListRepo: RepositoryContracts.IPlaylistRepository = PlayListRepository.getInstance()!!
+
+        playListRepo.getPlayListsAndVideosForChannels(listOf("UCsooa4yRKGN_zEE8iknghZA"))
     }
-
 
 
     override fun showVideoView(video: YoutubeVideo, data: List<YoutubeVideo>) {
 
-        if(media?.parent!=null){
+        media = layoutInflater.inflate(R.layout.youtubevideo_player, rootCordinator, false) as YouTubePlayerView
+        description = layoutInflater.inflate(R.layout.video_description, rootCordinator, false)
+
+        if (media?.parent != null) {
             rootCordinator?.removeView(media)
         }
 
-        if(description?.parent!=null){
+        if (description?.parent != null) {
             rootCordinator?.removeView(description)
         }
 
         rootCordinator!!.addView(media)
         rootCordinator!!.addView(description)
 
-        behavior = YoutubeLikeBehavior.from(media)
+        val behavior = YoutubeLikeBehavior.from(media)
         behavior?.listener = this
 
         val videoDetailsView: VideoDetailsView = description!!.findViewById(R.id.video_details)
@@ -101,7 +105,7 @@ class LibraryTabsActivityFragment : Fragment(), MainContract.View, YoutubeLikeBe
         if (newState == YoutubeLikeBehavior.STATE_TO_RIGHT || newState == YoutubeLikeBehavior.STATE_TO_LEFT) {
             rootCordinator?.removeView(media)
             rootCordinator?.removeView(description)
-            behavior = null
+            val behavior = YoutubeLikeBehavior.from(media)
         }
     }
 }

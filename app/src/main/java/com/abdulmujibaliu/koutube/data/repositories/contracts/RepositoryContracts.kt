@@ -1,5 +1,8 @@
 package com.abdulmujibaliu.koutube.data.repositories.contracts
 
+import com.abdulmujibaliu.koutube.data.models.BaseModel
+import com.abdulmujibaliu.koutube.data.models.PlayListItemsResult
+import com.abdulmujibaliu.koutube.data.models.PlayListsResult
 import com.abdulmujibaliu.koutube.data.models.VideoResult
 import io.reactivex.Observable
 import io.reactivex.subjects.ReplaySubject
@@ -9,8 +12,15 @@ import io.reactivex.subjects.ReplaySubject
  */
 interface RepositoryContracts {
 
-    interface IPlaylistRepository {
-        fun getPlayVideosForChannels(channelIDs: List<String>) : ReplaySubject<VideoResult>?
+    interface IDataSource {
+        fun getVideosObservable() : Observable<VideoResult>?
+
+        fun getPlayListObservable() : Observable<List<PlayListItemsResult>>?
+
+    }
+
+    interface IPlaylistRepository: IDataSource {
+        fun getPlayListsAndVideosForChannels(channelIDs: List<String>)
     }
 
 }

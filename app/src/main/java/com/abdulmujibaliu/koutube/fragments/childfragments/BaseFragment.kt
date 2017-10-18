@@ -8,15 +8,24 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.abdulmujibaliu.koutube.R
+import com.abdulmujibaliu.koutube.data.models.YoutubeVideo
+import com.abdulmujibaliu.koutube.data.repositories.PlayListRepository
+import com.abdulmujibaliu.koutube.data.repositories.contracts.RepositoryContracts
 import com.abdulmujibaliu.koutube.fragments.MainContract
 
 
 /**
  * A simple [Fragment] subclass.
  */
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment : Fragment(), VideoClickListener {
+    val TAG: String = javaClass.simpleName
+
+    override fun onVideoClicked(youtubeVideo: YoutubeVideo, data: List<YoutubeVideo>) {
+        parentView?.showVideoView(youtubeVideo, data)
+    }
 
     protected var parentView: MainContract.View ? = null
+    val dataSource: RepositoryContracts.IDataSource = PlayListRepository.getInstance()!!
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

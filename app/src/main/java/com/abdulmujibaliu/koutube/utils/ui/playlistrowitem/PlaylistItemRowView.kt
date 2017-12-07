@@ -1,12 +1,16 @@
 package com.abdulmujibaliu.koutube.utils.ui.playlistrowitem
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Context
+import android.content.res.Resources
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.TextView
 import android.view.LayoutInflater
 import android.util.AttributeSet
 import android.view.View
+import android.view.animation.DecelerateInterpolator
 import android.widget.LinearLayout
 import com.abdulmujibaliu.koutube.R
 import com.abdulmujibaliu.koutube.data.models.BaseModel
@@ -14,6 +18,7 @@ import com.abdulmujibaliu.koutube.data.models.PlayListItem
 import com.abdulmujibaliu.koutube.data.models.PlayListItemsResult
 import com.abdulmujibaliu.koutube.fragments.childfragments.PlayListItemClickListener
 import com.abdulmujibaliu.koutube.utils.ui.playlistrowitem.adapter.PlayListRowRVAdapter
+import com.abdulmujibaliu.koutube.utils.ui.playlistrowitem.recyclerscroll.PlayListRecyclerScrollListener
 
 
 /**
@@ -26,6 +31,7 @@ class PlayListItemRowView : LinearLayout {
     private var mView: View? = null
     private var mSectionTitleView: TextView? = null
     private var mYoutubeVideosRV: RecyclerView? = null
+    private var mSectionControls: LinearLayout?
 
     protected var mAttachmentsAdapter: PlayListRowRVAdapter? = null
     protected var mLayoutManager: RecyclerView.LayoutManager? = null
@@ -33,6 +39,7 @@ class PlayListItemRowView : LinearLayout {
     private var mSectionTitle: String? = null
     protected var mDataSource: List<BaseModel> = ArrayList()
     var mListener: PlayListItemClickListener? = null
+
 
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
@@ -52,6 +59,7 @@ class PlayListItemRowView : LinearLayout {
 
         mSectionTitleView = mView!!.findViewById(R.id.section_title)
         mYoutubeVideosRV = mView!!.findViewById(R.id.section_items_recycler)
+        mSectionControls = mView!!.findViewById<LinearLayout>(R.id.section_controls)
 
         initRV()
 
@@ -84,10 +92,37 @@ class PlayListItemRowView : LinearLayout {
         this.mAttachmentsAdapter!!.addAll(youtubeVideos)
     }
 
+    fun dpToPx(dp: Int): Int {
+        return (dp * Resources.getSystem().displayMetrics.density).toInt()
+    }
+
     protected fun initRV() {
         mLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         mYoutubeVideosRV!!.layoutManager = mLayoutManager
         mYoutubeVideosRV!!.setHasFixedSize(true)
+        mYoutubeVideosRV!!.addOnScrollListener(object: PlayListRecyclerScrollListener(){
+            override fun show() {
+                mSectionControls!!.animate().translationX(0f).setInterpolator(DecelerateInterpolator(2f))
+                        .setListener(object: AnimatorListenerAdapter(){
+                            override fun onAnimationStart(animation: Animator?) {
+                                super.onAnimationStart(animation)
+                                mSectionControls!!.visibility = View.VISIBLE
+                            }
+                        })
+                        .start()
+            }
+
+            override fun hide() {
+                mSectionControls!!.animate().translationX(-(mSectionControls!!.width + (dpToPx(16)*2).toFloat())).setInterpolator(DecelerateInterpolator(2f))
+                        .setListener(object: AnimatorListenerAdapter(){
+                            override fun onAnimationStart(animation: Animator?) {
+                                super.onAnimationStart(animation)
+                                mSectionControls!!.visibility = View.GONE
+                            }
+                        })
+                        .start()
+            }
+        })
         mYoutubeVideosRV!!.isNestedScrollingEnabled = false
         try {
             mAttachmentsAdapter = PlayListRowRVAdapter(context, mListener)

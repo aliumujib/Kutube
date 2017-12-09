@@ -8,7 +8,7 @@
     android:scaleType="centerCrop"
     app:layout_behavior="@string/coordinator_behaviors_youtube_behavior"
     app:shrinkRate="@integer/media_shrink_rate"
-    app:ylb_marginBottom="@dimen/margin_bottom"
+    app:ylb_marginBottom="@dimen/margin_bottom_transparent_status"
     app:ylb_marginRight="@dimen/margin_right"
     app:start_state="state_expanded"
     />

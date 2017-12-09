@@ -8,6 +8,10 @@ import android.view.Menu
 import android.view.MenuItem
 
 import kotlinx.android.synthetic.main.activity_library_tabs.*
+import android.view.WindowManager
+import android.os.Build
+
+
 
 class LibraryTabsActivity : AppCompatActivity() {
 
@@ -15,6 +19,10 @@ class LibraryTabsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_library_tabs)
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            val w = window
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

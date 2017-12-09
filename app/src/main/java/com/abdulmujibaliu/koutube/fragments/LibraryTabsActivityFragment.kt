@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.design.widget.CoordinatorLayout
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -50,6 +51,10 @@ class LibraryTabsActivityFragment : Fragment(), MainContract.View, YoutubeLikeBe
         val videoTabsAdapter = VideoTabsAdapter(childFragmentManager)
         toolbar.setTitle("Koutube")
         toolbar.setTitleTextColor(ContextCompat.getColor(context, R.color.colorAccent))
+        var appCompatactivity : AppCompatActivity? = activity as AppCompatActivity
+        appCompatactivity!!.setSupportActionBar(toolbar)
+
+
         container.adapter = videoTabsAdapter
 
         tabs.setupWithViewPager(container)

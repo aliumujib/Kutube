@@ -1,0 +1,21 @@
+apply plugin: 'com.android.library'
+
+dependencies {
+  compile "com.android.support:support-v4:$rootProject.ext.supportVersion"
+  compile 'com.nineoldandroids:library:2.4.0'
+}
+
+android {
+  compileSdkVersion rootProject.ext.compileSdkVersion
+  buildToolsVersion rootProject.ext.buildToolsVersion
+  defaultConfig {
+    minSdkVersion rootProject.ext.minSdkVersion
+    targetSdkVersion rootProject.ext.targetSdkVersion
+  }
+
+  lintOptions {
+    abortOnError false
+  }
+}
+
+

@@ -2,6 +2,7 @@ package com.abdulmujibaliu.koutube.fragments.rvadapter
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,8 @@ class VideoRVAdapter(context: Context, videoClickListener: VideoClickListener) :
     val context = context;
     val videoClickListener = videoClickListener
 
+    val TAG: String = javaClass.simpleName
+
     private var data: MutableList<YoutubeVideo> = mutableListOf()
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
@@ -31,7 +34,8 @@ class VideoRVAdapter(context: Context, videoClickListener: VideoClickListener) :
 
     fun addAll(data: List<YoutubeVideo>) {
         this.data.addAll(data)
-        notifyDataSetChanged()
+        Log.d(TAG, data.size.toString());
+        this.notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {

@@ -125,5 +125,8 @@ class KutConstants {
         val VIDEO_VIDEO_VIEW_COUNT: String = "viewCount"
 
 
+        val REPLACE_WITH_BACK_STATE: Int = 1
+        val REPLACE_WITHOUT_BACK_STATE: Int = 1
+
     }
 }

@@ -14,14 +14,13 @@ import kotlinx.android.synthetic.main.fragment_base.*
 
 class VideosFragment : BaseFragment() {
 
-
-
     var videosRVAdapter: VideoRVAdapter? = null
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         if (arguments != null) {
 
         }
@@ -35,8 +34,6 @@ class VideosFragment : BaseFragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = videosRVAdapter
         videosRVAdapter?.notifyDataSetChanged()
-
-
 
         //UCpEHs4jtfj1sTo1g-ubDyMg //MTANG
 

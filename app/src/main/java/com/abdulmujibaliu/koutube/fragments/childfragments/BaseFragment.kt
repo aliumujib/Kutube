@@ -25,6 +25,7 @@ abstract class BaseFragment : Fragment(), VideoClickListener {
     }
 
     protected var parentView: MainContract.View ? = null
+
     val dataSource: RepositoryContracts.IDataSource = PlayListRepository.getInstance()!!
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -32,17 +33,13 @@ abstract class BaseFragment : Fragment(), VideoClickListener {
         return inflater!!.inflate(R.layout.fragment_base, container, false)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-        onAttachToParentFragment(parentFragment)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun onResume() {
+        super.onResume()
 
     }
+
+
 
     // In the child fragment.
     private fun onAttachToParentFragment(fragment: Fragment) {

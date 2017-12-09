@@ -100,7 +100,7 @@ class PlayListItemRowView : LinearLayout {
         mLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         mYoutubeVideosRV!!.layoutManager = mLayoutManager
         mYoutubeVideosRV!!.setHasFixedSize(true)
-        mYoutubeVideosRV!!.addOnScrollListener(object: PlayListRecyclerScrollListener(){
+       /* mYoutubeVideosRV!!.addOnScrollListener(object: PlayListRecyclerScrollListener(){
             override fun show() {
                 mSectionControls!!.animate().translationX(0f).setInterpolator(DecelerateInterpolator(2f))
                         .setListener(object: AnimatorListenerAdapter(){
@@ -122,7 +122,7 @@ class PlayListItemRowView : LinearLayout {
                         })
                         .start()
             }
-        })
+        })*/
         mYoutubeVideosRV!!.isNestedScrollingEnabled = false
         try {
             mAttachmentsAdapter = PlayListRowRVAdapter(context, mListener)

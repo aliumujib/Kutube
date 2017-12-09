@@ -1,18 +1,27 @@
 package com.abdulmujibaliu.koutube.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.CoordinatorLayout
+import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.support.v4.content.ContextCompat
+import android.support.v4.view.GravityCompat
+import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.abdulmujibaliu.koutube.R
+import com.abdulmujibaliu.koutube.data.KutConstants
 import com.abdulmujibaliu.koutube.data.models.YoutubeVideo
 import com.abdulmujibaliu.koutube.data.repositories.PlayListRepository
 import com.abdulmujibaliu.koutube.data.repositories.contracts.RepositoryContracts
+import com.abdulmujibaliu.koutube.fragments.childfragments.PlaylistsFragment
+import com.abdulmujibaliu.koutube.fragments.childfragments.VideosFragment
 import com.abdulmujibaliu.koutube.tabsadapter.VideoTabsAdapter
 import com.abdulmujibaliu.koutube.utils.ui.videodetailsview.VideoDetailsView
 import com.pierfrancescosoffritti.youtubeplayer.player.AbstractYouTubePlayerListener
@@ -47,24 +56,60 @@ class LibraryTabsActivityFragment : Fragment(), MainContract.View, YoutubeLikeBe
         super.onViewCreated(view, savedInstanceState)
 
         rootCordinator = view!!.findViewById(R.id.root_view)
-
-        val videoTabsAdapter = VideoTabsAdapter(childFragmentManager)
-        toolbar.setTitle("Koutube")
-        toolbar.setTitleTextColor(ContextCompat.getColor(context, R.color.colorAccent))
-        var appCompatactivity : AppCompatActivity? = activity as AppCompatActivity
+        toolbar.setTitle("Search")
+        var appCompatactivity: AppCompatActivity? = activity as AppCompatActivity
         appCompatactivity!!.setSupportActionBar(toolbar)
 
-
-        container.adapter = videoTabsAdapter
-
-        tabs.setupWithViewPager(container)
-
-
         val playListRepo: RepositoryContracts.IPlaylistRepository = PlayListRepository.getInstance()!!
-
         playListRepo.getPlayListsAndVideosForChannels(listOf("UCsooa4yRKGN_zEE8iknghZA"))
+
+        val drawer = view.findViewById<DrawerLayout>(R.id.drawer_layout)
+        val toggle = ActionBarDrawerToggle(
+                activity, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawer.setDrawerListener(toggle)
+        toggle.syncState()
+
+        nav_view.setNavigationItemSelectedListener { item ->
+
+            if (item.itemId == R.id.nav_home) {
+                replaceFragmentWithorWithoutBackState(VideosFragment.newInstance(), context, KutConstants.REPLACE_WITH_BACK_STATE, R.id.container_frame)
+            } else if (item.itemId == R.id.nav_playlist) {
+                replaceFragmentWithorWithoutBackState(PlaylistsFragment.newInstance(), context, KutConstants.REPLACE_WITH_BACK_STATE, R.id.container_frame)
+            } else if (item.itemId == R.id.nav_downloads) {
+
+            }
+
+            if (drawer.isDrawerOpen(GravityCompat.START)) run { drawer.closeDrawer(GravityCompat.START) }
+
+            false
+        }
+
+        replaceFragmentWithorWithoutBackState(VideosFragment.newInstance(), context, KutConstants.REPLACE_WITH_BACK_STATE, R.id.container_frame)
+
+
     }
 
+
+    fun replaceFragmentWithorWithoutBackState(fragment: Fragment, context: Context, mode: Int, resID: Int) {
+        val backStateName = fragment.javaClass.name
+
+        val manager = (context as AppCompatActivity).supportFragmentManager
+        val fragmentPopped = manager.popBackStackImmediate(backStateName, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
+        val ft = manager.beginTransaction()
+        ft.replace(resID, fragment, getTagForFragment(fragment))
+        if (mode == KutConstants.REPLACE_WITH_BACK_STATE) {
+            ft.addToBackStack(backStateName)
+        } else {
+
+        }
+        ft.commit()
+    }
+
+
+    fun getTagForFragment(frag: Fragment): String {
+        return frag.javaClass.simpleName
+    }
 
     override fun showVideoView(video: YoutubeVideo, data: List<YoutubeVideo>) {
 

@@ -30,6 +30,7 @@ class PlayListRepository : RepositoryContracts.IPlaylistRepository {
 
 
     var videosListSubject = ReplaySubject.create<VideoResult>()
+
     var playListSubject = ReplaySubject.create<List<PlayListItemsResult>>()
 
     override fun getPlayListsAndVideosForChannels(channelIDs: List<String>) {

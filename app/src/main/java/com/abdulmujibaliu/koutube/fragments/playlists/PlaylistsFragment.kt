@@ -1,10 +1,11 @@
-package com.abdulmujibaliu.koutube.fragments.childfragments
+package com.abdulmujibaliu.koutube.fragments.playlists
 
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.abdulmujibaliu.koutube.data.models.PlayListItem
+import com.abdulmujibaliu.koutube.fragments.BaseFragment
 import com.abdulmujibaliu.koutube.fragments.rvadapter.PlaylistRVAdapter
 import kotlinx.android.synthetic.main.fragment_base.*
 

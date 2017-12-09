@@ -10,7 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.abdulmujibaliu.koutube.R
 import com.abdulmujibaliu.koutube.data.models.YoutubeVideo
-import com.abdulmujibaliu.koutube.fragments.childfragments.VideoClickListener
+import com.abdulmujibaliu.koutube.fragments.main.VideoClickListener
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_video_card.view.*
 

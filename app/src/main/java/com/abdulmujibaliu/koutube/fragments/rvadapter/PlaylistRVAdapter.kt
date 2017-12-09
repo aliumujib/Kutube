@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.abdulmujibaliu.koutube.R
 import com.abdulmujibaliu.koutube.data.models.PlayListItemsResult
-import com.abdulmujibaliu.koutube.fragments.childfragments.VideoClickListener
+import com.abdulmujibaliu.koutube.fragments.main.VideoClickListener
 import com.abdulmujibaliu.koutube.utils.ui.playlistrowitem.PlayListItemRowView
 import kotlinx.android.synthetic.main.playlist_item_row_view.view.*
 

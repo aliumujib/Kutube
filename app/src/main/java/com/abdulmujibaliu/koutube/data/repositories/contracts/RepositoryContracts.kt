@@ -23,4 +23,11 @@ interface RepositoryContracts {
         fun getPlayListsAndVideosForChannels(channelIDs: List<String>)
     }
 
+    interface IVideoSearchRepository {
+
+        fun searchForVideo(filters: HashMap<String, Any>)
+
+        fun getResultObservable() : Observable<VideoResult>?
+
+    }
 }

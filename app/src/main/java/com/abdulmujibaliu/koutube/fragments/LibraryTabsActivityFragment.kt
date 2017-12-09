@@ -3,10 +3,8 @@ package com.abdulmujibaliu.koutube.fragments
 import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.CoordinatorLayout
-import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -20,9 +18,8 @@ import com.abdulmujibaliu.koutube.data.KutConstants
 import com.abdulmujibaliu.koutube.data.models.YoutubeVideo
 import com.abdulmujibaliu.koutube.data.repositories.PlayListRepository
 import com.abdulmujibaliu.koutube.data.repositories.contracts.RepositoryContracts
-import com.abdulmujibaliu.koutube.fragments.childfragments.PlaylistsFragment
-import com.abdulmujibaliu.koutube.fragments.childfragments.VideosFragment
-import com.abdulmujibaliu.koutube.tabsadapter.VideoTabsAdapter
+import com.abdulmujibaliu.koutube.fragments.playlists.PlaylistsFragment
+import com.abdulmujibaliu.koutube.fragments.main.VideosFragment
 import com.abdulmujibaliu.koutube.utils.ui.videodetailsview.VideoDetailsView
 import com.pierfrancescosoffritti.youtubeplayer.player.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.youtubeplayer.player.YouTubePlayer

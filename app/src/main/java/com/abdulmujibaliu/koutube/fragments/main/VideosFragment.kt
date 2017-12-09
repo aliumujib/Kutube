@@ -1,18 +1,24 @@
-package com.abdulmujibaliu.koutube.fragments.childfragments
+package com.abdulmujibaliu.koutube.fragments.main
 
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
+import com.abdulmujibaliu.koutube.data.models.VideoResult
 import com.abdulmujibaliu.koutube.data.models.YoutubeVideo
-import com.abdulmujibaliu.koutube.data.repositories.PlayListRepository
-import com.abdulmujibaliu.koutube.data.repositories.contracts.RepositoryContracts
+import com.abdulmujibaliu.koutube.fragments.BaseFragment
+import com.abdulmujibaliu.koutube.fragments.mvp.VideosContract
 import com.abdulmujibaliu.koutube.fragments.rvadapter.VideoRVAdapter
 import kotlinx.android.synthetic.main.fragment_base.*
 
 
-class VideosFragment : BaseFragment() {
+class VideosFragment : BaseFragment(), VideosContract.VideosView {
+
+    override fun setData(data: VideoResult) {
+        Log.d(TAG, data.toString())
+        videosRVAdapter!!.addAll(data.items as List<YoutubeVideo>)
+    }
 
     var videosRVAdapter: VideoRVAdapter? = null
 
@@ -37,13 +43,12 @@ class VideosFragment : BaseFragment() {
 
         //UCpEHs4jtfj1sTo1g-ubDyMg //MTANG
 
-        dataSource.getVideosObservable()?.subscribe(
+       /* dataSource.getVideosObservable()?.subscribe(
                 { data ->
-                    Log.d(TAG, data.toString())
-                    videosRVAdapter!!.addAll(data.items as List<YoutubeVideo>)
+
                 }, { error ->
             error.printStackTrace()
-        })
+        })*/
     }
 
 

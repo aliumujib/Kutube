@@ -3,8 +3,8 @@ package com.abdulmujibaliu.koutube.tabsadapter
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import com.abdulmujibaliu.koutube.fragments.childfragments.PlaylistsFragment
-import com.abdulmujibaliu.koutube.fragments.childfragments.VideosFragment
+import com.abdulmujibaliu.koutube.fragments.playlists.PlaylistsFragment
+import com.abdulmujibaliu.koutube.fragments.main.VideosFragment
 
 /**
  * Created by abdulmujibaliu on 10/15/17.

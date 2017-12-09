@@ -9,12 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.abdulmujibaliu.koutube.R
 import com.abdulmujibaliu.koutube.data.models.BaseModel
-import com.abdulmujibaliu.koutube.data.models.PlayListItem
-import com.abdulmujibaliu.koutube.data.models.YoutubeVideo
-import com.abdulmujibaliu.koutube.fragments.childfragments.PlayListItemClickListener
-import com.abdulmujibaliu.koutube.fragments.childfragments.VideoClickListener
+import com.abdulmujibaliu.koutube.fragments.playlists.PlayListItemClickListener
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_video_card.view.*
 import kotlinx.android.synthetic.main.play_list_item.view.*
 
 /**

@@ -1,7 +1,5 @@
 package com.abdulmujibaliu.koutube.utils.ui.playlistrowitem
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.content.res.Resources
 import android.support.v7.widget.LinearLayoutManager
@@ -10,15 +8,12 @@ import android.widget.TextView
 import android.view.LayoutInflater
 import android.util.AttributeSet
 import android.view.View
-import android.view.animation.DecelerateInterpolator
 import android.widget.LinearLayout
 import com.abdulmujibaliu.koutube.R
 import com.abdulmujibaliu.koutube.data.models.BaseModel
-import com.abdulmujibaliu.koutube.data.models.PlayListItem
 import com.abdulmujibaliu.koutube.data.models.PlayListItemsResult
-import com.abdulmujibaliu.koutube.fragments.childfragments.PlayListItemClickListener
+import com.abdulmujibaliu.koutube.fragments.playlists.PlayListItemClickListener
 import com.abdulmujibaliu.koutube.utils.ui.playlistrowitem.adapter.PlayListRowRVAdapter
-import com.abdulmujibaliu.koutube.utils.ui.playlistrowitem.recyclerscroll.PlayListRecyclerScrollListener
 
 
 /**

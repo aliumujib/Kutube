@@ -1,4 +1,4 @@
-package com.abdulmujibaliu.koutube.fragments.childfragments
+package com.abdulmujibaliu.koutube.fragments
 
 
 import android.os.Bundle
@@ -11,7 +11,9 @@ import com.abdulmujibaliu.koutube.R
 import com.abdulmujibaliu.koutube.data.models.YoutubeVideo
 import com.abdulmujibaliu.koutube.data.repositories.PlayListRepository
 import com.abdulmujibaliu.koutube.data.repositories.contracts.RepositoryContracts
-import com.abdulmujibaliu.koutube.fragments.MainContract
+import com.abdulmujibaliu.koutube.fragments.main.VideoClickListener
+import com.abdulmujibaliu.koutube.fragments.mvp.BaseContract
+import com.abdulmujibaliu.koutube.utils.MessageUtils
 
 
 /**
@@ -24,7 +26,7 @@ abstract class BaseFragment : Fragment(), VideoClickListener {
         parentView?.showVideoView(youtubeVideo, data)
     }
 
-    protected var parentView: MainContract.View ? = null
+    protected var parentView: MainContract.View? = null
 
     val dataSource: RepositoryContracts.IDataSource = PlayListRepository.getInstance()!!
 
@@ -39,7 +41,25 @@ abstract class BaseFragment : Fragment(), VideoClickListener {
 
     }
 
+    fun showLoading() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
+    fun hideLoading() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun showError(error: String) {
+        MessageUtils.errorMessage(activity, error)
+    }
+
+    fun showEmpty() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun showMessage(message: String) {
+        MessageUtils.warningMessage(activity, message)
+    }
 
     // In the child fragment.
     private fun onAttachToParentFragment(fragment: Fragment) {
